@@ -397,7 +397,8 @@ def narrate_primitives(position: int, fd: int, exec_path: str) -> None:
 
 def main() -> int:
     global VERBOSE
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])    
+    parser = argparse.ArgumentParser(
+        description="Brotli decompression vulnerability proof of concept")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=3000)
     parser.add_argument("--timeout", type=float, default=30.0)

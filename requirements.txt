@@ -2,7 +2,6 @@
 
 # This is only required for `poc.py --autoprofile` (gadget resolution from a
 
-# node binary / docker image).
 
 pwntools>=4.11
  
