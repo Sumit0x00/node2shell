@@ -1,24 +1,5 @@
 #!/usr/bin/env python3
-"""node2shell: CVE-2026-111497 proof-of-concept (authorized lab use only).
 
-Reproduces remote code execution against the vulnerable Node.js Brotli decoder
-(node 24.22.0) through Express 5 / body-parser 2.x, which transparently decode
-`Content-Encoding: br` request bodies. A crafted stream drives the decoder's
-impossible distance-block switch into an invalid state, yielding a controlled
-16-byte out-of-bounds write (decode.c memmove16, copy_dst = ring + pos, pos as a
-signed displacement). The write redirects a saved return address into a ROP
-chain that dup2()s the request socket and execvp("/usr/bin/id"), so `id` output
-returns on the attacker's own connection.
-
-The write destination depends on the process's ASLR layout, which the bug does
-NOT let us leak ahead of time (the only in-stream read primitive discloses a few
-bytes of ring slack). So the PoC is PROBABILISTIC: it fires a fixed-offset guess
-and crash-resets the worker between attempts (the supervisor restarts it with a
-fresh layout) until the guess matches. This matches Imperva's "several attempts"
-result; see README for why a deterministic single-shot is not achievable here.
-
-Loopback-only by construction. Point it only at a lab container you own.
-"""
 import argparse
 import hashlib
 import os
